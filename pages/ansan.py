@@ -65,10 +65,29 @@ tab1, tab2, tab3 = st.tabs(["📈 연도별 성별 추이", "🔥 인구 변동 
 with tab1:
     st.header(f"✨ {start_year}년 ~ {end_year}년 성별 인구 추이")
     
-    # 연도별 남녀 인구 합계 계산
-    annual_pop = df_filtered.groupby('연度')[['남자_인구수', '여자_인구수', '총인구수']].sum().reset_index()
+    # 연도별 남녀 인구 합계 계산 ('연도' 오타 수정 완료)
+    annual_pop = df_filtered.groupby('연도')[['남자_인구수', '여자_인구수', '총인구수']].sum().reset_index()
     
     # 지표 요약(Metric) 시각화
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric(label=f"{end_year}년 총인구 수", value=f"{int(annual_pop['총인구수'].iloc[-1]):,} 명
+    if not annual_pop.empty:
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(label=f"{end_year}년 총인구 수", value=f"{int(annual_pop['총인구수'].iloc[-1]):,} 명")
+        with col2:
+            st.metric(label="남성 인구 비율", value=f"{annual_pop['남자_인구수'].iloc[-1] / annual_pop['총인구수'].iloc[-1] * 100:.1f} %")
+        with col3:
+            st.metric(label="여성 인구 비율", value=f"{annual_pop['여자_인구수'].iloc[-1] / annual_pop['총인구수'].iloc[-1] * 100:.1f} %")
+            
+        # 인터랙티브 라인 차트 생성
+        st.subheader("📊 연도별 남녀 인구 추이 라인 차트")
+        chart_data = annual_pop.set_index('연도')[['남자_인구수', '여자_인구수']]
+        st.line_chart(chart_data, width='stretch')
+        
+        st.subheader("📋 데이터 상세 테이블")
+        st.dataframe(annual_pop, width='stretch')
+    else:
+        st.warning("선택한 조건에 맞는 데이터가 없습니다.")
+
+
+# --- 동별 변화량 계산 로직 (선택된 연도 기준) ---
+df_start = df_filtered[df_filtered['연도'] == start_
