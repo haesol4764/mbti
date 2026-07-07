@@ -126,9 +126,9 @@ elif menu == "4) MBTI 퀴즈 & 팩트체크 (New)":
         global_top1 = global_mean.index[0]
         
         if q2_choice == global_top1:
-            st.success(f"⭕ 정답입니다! 전 세계 평균적으로 **{global_top1}** 유형이 약 {global_mean[0]:.2f}%로 가장 많습니다.")
-        else:
-            st.error(f"❌ 아쉽습니다! 정답은 **{global_top1}** (평균 {global_mean[0]:.2f}%) 입니다.")
+            # --- Q2. 전 세계 평균 1위 MBTI ---
+    st.subheader("💡 Q2. 전 세계 모든 국가를 통틀어 '평균 비율이 가장 높은' MBTI 유형은 무엇일까요?")
+    q2_choice = st.selectbox("예상하는 MBTI를 골라보세요
             
         # 전체 평균 분포도 슬쩍 보여주기
         with st.expander("🌐 전 세계 MBTI 평균 비율 순위 보기"):
